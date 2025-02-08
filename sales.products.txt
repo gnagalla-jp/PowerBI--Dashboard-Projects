@@ -1,0 +1,5 @@
+et
+    Source = MySQL.Database("localhost", "sales", [ReturnSingleDatabase=true]),
+    sales_products = Source{[Schema="sales",Item="products"]}[Data]
+in
+    sales_products

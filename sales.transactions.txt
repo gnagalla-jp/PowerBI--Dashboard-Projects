@@ -1,0 +1,9 @@
+let
+    Source = MySQL.Database("localhost", "sales", [ReturnSingleDatabase=true]),
+    sales_transactions = Source{[Schema="sales",Item="transactions"]}[Data],
+    #"Filtered Rows" = Table.SelectRows(sales_transactions, each ([sales_amount] <> -1 and [sales_amount] <> 0)),
+    #"Normalized Sales amount Column" = Table.AddColumn(#"Filtered Rows", "Normalized Currency ", each if [currency] = "USD" or [currency] = "USD#(cr)" then [sales_amount] *87  else [sales_amount]),
+    #"cleanup Currency" = Table.SelectRows(#"Normalized Sales amount Column", each ([currency] = "INR#(cr)" or [currency] = "USD#(cr)")),
+    #"Renamed Columns" = Table.RenameColumns(#"cleanup Currency",{{"Normalized Currency ", "Nore_sales_amount "}})
+in
+    #"Renamed Columns"

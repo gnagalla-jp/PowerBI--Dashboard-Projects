@@ -1,0 +1,6 @@
+let
+    Source = MySQL.Database("localhost", "sales", [ReturnSingleDatabase=true]),
+    sales_markets = Source{[Schema="sales",Item="markets"]}[Data],
+    #"Filtered Rows" = Table.SelectRows(sales_markets, each ([zone] <> ""))
+in
+    #"Filtered Rows"
